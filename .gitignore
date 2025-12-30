@@ -1,0 +1,24 @@
+# Colcon
+build/
+install/
+log/
+
+# Ros / editor junk
+*.log
+*.swp
+*.swo
+*.vscode/
+.idea/
+
+
+# Python
+__pycache__/
+
+# OS junk
+.DS_Store
+*.bak
+*.orig
+
+# Gazebo / cache
+*.db
+*.sdf
