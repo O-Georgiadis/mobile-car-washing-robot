@@ -16,7 +16,7 @@
                     <box size="${base_length} ${base_width} ${base_height}" />       
                 </geometry>
                 <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0" />
-                <material name="blue" />
+                <material name="grey" />
             </visual>
             <collision>
                 <geometry>
