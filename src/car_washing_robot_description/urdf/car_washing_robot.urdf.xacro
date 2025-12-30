@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot name="car_washing_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="common_properties.xacro" />
+    <xacro:include filename="mobile_base.xacro" />
+    <xacro:include filename="mobile_base_gazebo.xacro" />
+    <xacro:include filename="water_tank.xacro"/>
+    <xacro:include filename="soap_tank.xacro"/>
+    <xacro:include filename="camera.xacro" />
+    <xacro:include filename="six_dof_arm.xacro"/>
+    
+   
+
+    <joint name="base_arm_base_joint" type="fixed"> 
+        <parent link="base_link"/>
+        <child link="arm_base_link"/>
+        <origin xyz="0 ${base_width/3.0} ${(base_height/2.0)+ 0.08}" rpy="0 0 0"/>
+    </joint>
+
+</robot>
