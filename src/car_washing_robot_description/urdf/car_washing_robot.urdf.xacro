@@ -7,21 +7,14 @@
     <xacro:include filename="water_tank.xacro"/>
     <xacro:include filename="soap_tank.xacro"/>
     <xacro:include filename="camera.xacro" />
-    <xacro:include filename="test_arm.xacro"/>
-    <xacro:include filename="test_arm_gazebo.xacro"/>
-    <!-- <xacro:include filename="arm_gazebo.xacro"/> -->
+    <xacro:include filename="six_dof_arm.xacro"/>
+    <xacro:include filename="six_dof_arm_gazebo.xacro"/>
     
    
     
     
-            <!-- Connection Joint Between Mobile Base and Arm -->
-    <!-- <joint name="mobile_base_arm_joint" type="fixed">
-        <parent link="base_link" />
-        <child link="arm_base_link" />
-        <origin xyz="${base_length / 5.0} 0 ${base_height}" rpy="0 0 0" />
-    </joint> -->
+    <!-- Connection Joint Between Mobile Base and Arm -->
 
-    <!--Connection test2-->
     <joint name="mobile_base_arm_joint" type="fixed">
         <parent link="base_link" />
         <child link="arm_base_link" />
