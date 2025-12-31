@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'my_robot_controller'
+package_name = 'car_washing_robot_controller'
 
 setup(
     name=package_name,
@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'simple_controller = my_robot_controller.simple_controller:main',
+            'simple_controller = car_washing_robot_controller.simple_controller:main',
         ],
     },
 )
