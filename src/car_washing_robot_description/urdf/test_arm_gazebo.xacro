@@ -4,8 +4,8 @@
     <gazebo>
         <plugin 
             filename="gz-sim-joint-position-controller-system" 
-            name="gz::sim::systems::JointPositionController_joint_1">
-            <joint_name>joint_1</joint_name>
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>link_1_joint</joint_name>
             <p_gain>6.0</p_gain>
         </plugin>
     </gazebo>
@@ -13,8 +13,8 @@
     <gazebo>
         <plugin 
             filename="gz-sim-joint-position-controller-system" 
-            name="gz::sim::systems::JointPositionController_joint_2">
-            <joint_name>joint_2</joint_name>
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>link_2_joint</joint_name>
             <p_gain>6.0</p_gain>
         </plugin>
     </gazebo>
@@ -22,8 +22,8 @@
     <gazebo>
         <plugin 
             filename="gz-sim-joint-position-controller-system" 
-            name="gz::sim::systems::JointPositionController_joint_3">
-            <joint_name>joint_3</joint_name>
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>link_3_joint</joint_name>
             <p_gain>5.0</p_gain>
         </plugin>
     </gazebo>
@@ -31,8 +31,8 @@
     <gazebo>
         <plugin 
             filename="gz-sim-joint-position-controller-system" 
-            name="gz::sim::systems::JointPositionController_joint_4">
-            <joint_name>joint_4</joint_name>
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>link_4_joint</joint_name>
             <p_gain>5.0</p_gain>
         </plugin>
     </gazebo>
@@ -40,8 +40,8 @@
     <gazebo>
         <plugin 
             filename="gz-sim-joint-position-controller-system" 
-            name="gz::sim::systems::JointPositionController_joint_5">
-            <joint_name>joint_5</joint_name>
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>link_5_joint</joint_name>
             <p_gain>4.0</p_gain>
         </plugin>
     </gazebo>
@@ -49,8 +49,8 @@
     <gazebo>
         <plugin 
             filename="gz-sim-joint-position-controller-system" 
-            name="gz::sim::systems::JointPositionController_joint_6">
-            <joint_name>joint_6</joint_name>
+            name="gz::sim::systems::JointPositionController">
+            <joint_name>link_6_joint</joint_name>
             <p_gain>4.0</p_gain>
         </plugin>
     </gazebo>
@@ -60,12 +60,12 @@
         <plugin 
             filename="gz-sim-joint-state-publisher-system" 
             name="gz::sim::systems::JointStatePublisher">
-            <joint_name>joint_1</joint_name>
-            <joint_name>joint_2</joint_name>
-            <joint_name>joint_3</joint_name>
-            <joint_name>joint_4</joint_name>
-            <joint_name>joint_5</joint_name>
-            <joint_name>joint_6</joint_name>
+            <joint_name>link_1_joint</joint_name>
+            <joint_name>link_2_joint</joint_name>
+            <joint_name>link_3_joint</joint_name>
+            <joint_name>link_4_joint</joint_name>
+            <joint_name>link_5_joint</joint_name>
+            <joint_name>link_6_joint</joint_name>
         </plugin>
     </gazebo>
 
