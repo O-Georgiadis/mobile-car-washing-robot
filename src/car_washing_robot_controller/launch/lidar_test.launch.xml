@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-  <launch>
-      <node pkg="car_washing_robot_controller"
-            exec="lidar_test_node"
-            name="lidar_test"
-            output="screen" />
-  </launch>
+<launch>
+    <node pkg="car_washing_robot_controller" exec="lidar_test_node" name="lidar_test" output="screen" />
+    <node pkg="car_washing_robot_controller" exec="approach_node" name="approach_node" output="screen" />
+</launch>

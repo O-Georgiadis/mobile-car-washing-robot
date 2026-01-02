@@ -30,6 +30,7 @@ setup(
         'console_scripts': [
             'simple_controller = car_washing_robot_controller.simple_controller:main',
             'lidar_test_node = car_washing_robot_controller.lidar_test_node:main',
+            'approach_node = car_washing_robot_controller.nodes.approach_node:main',
         ],
     },
 )
