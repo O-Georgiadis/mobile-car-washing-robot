@@ -57,7 +57,7 @@
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="0 1 0"/>
       <limit lower="${-pi/2}" upper="${pi/2}" effort="100" velocity="100" />
-      <dynamics friction="1.0" damping="5.0" />
+      <dynamics friction="10.0" damping="50.0" />
     </joint>
   </xacro:macro>
 
@@ -90,7 +90,7 @@
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="0 0 1"/>
       <limit lower="${-pi/2}" upper="${pi/2}" effort="100" velocity="100" />
-      <dynamics friction="1.0" damping="5.0" />
+      <dynamics friction="10.0" damping="50.0" />
     </joint>
   </xacro:macro>
 
