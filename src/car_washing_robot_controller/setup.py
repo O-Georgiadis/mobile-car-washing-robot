@@ -1,4 +1,7 @@
+import os
 from setuptools import find_packages, setup
+from glob import glob
+
 
 package_name = 'car_washing_robot_controller'
 
@@ -10,6 +13,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.xml')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,6 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'simple_controller = car_washing_robot_controller.simple_controller:main',
+            'lidar_test_node = car_washing_robot_controller.lidar_test_node:main',
         ],
     },
 )
