@@ -23,7 +23,7 @@ __pycache__/
 *.db
 
 # Ignore SDF everywhere
-*.sdf
+# *.sdf
 
-# But track Gazebo world files
-!src/car_washing_robot_bringup/worlds/*.sdf
+# # But track Gazebo world files
+# !src/car_washing_robot_bringup/worlds/*.sdf
