@@ -3,20 +3,35 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
-
+import time
+from ..utils.constants import (
+    APPROACH_SPEED, TARGET_DISTANCE,
+    WALL_TARGET_DISTANCE, WALL_FOLLOW_SPEED, WALL_DISTANCE_TOLERANCE, STEERING_GAIN,
+    CORNER_DETECTION_THRESHOLD, TURNING_SPEED, TURN_DURATION,
+    ZERO, MAX_DISTANCE
+)
+from ..utils.robot_state import RobotState
 
 
 class ApproachNode(Node):
     def __init__(self):
         Node.__init__(self, 'approach_node')
-        self.target_distance = 0.7
-        self.approach_speed = 0.2
-        self.wall_target_distance = 0.5
-        self.wall_follow_speed = 0.15
-        self.wall_distance_tolerance = 0.1
-        self.steering_gain = 0.3
+        self.target_distance = TARGET_DISTANCE
+        self.approach_speed = APPROACH_SPEED
+        self.wall_target_distance = WALL_TARGET_DISTANCE
+        self.wall_follow_speed = WALL_FOLLOW_SPEED
+        self.wall_distance_tolerance = WALL_DISTANCE_TOLERANCE
+        self.steering_gain = STEERING_GAIN
 
-        self.state = 'APPROACH'
+        self.corner_threshold = CORNER_DETECTION_THRESHOLD
+        self.turning_speed = TURNING_SPEED
+        self.turn_duration = TURN_DURATION
+
+        self.state = RobotState.APPROACH
+
+        self.turn_count = 0
+        self.total_turns = 4
+        self.turn_start_time = None
 
         self.scan_subscriber = self.create_subscription(
             LaserScan,
@@ -39,15 +54,19 @@ class ApproachNode(Node):
 
         # validate
         if front_distance == float('inf') or front_distance != front_distance:
-            front_distance = 999.0
+            front_distance = MAX_DISTANCE
 
         if side_distance == float('inf') or side_distance != side_distance:
-            side_distance = 999.0
+            side_distance = MAX_DISTANCE
 
-        if self.state == 'APPROACH':
+        if self.state == RobotState.APPROACH:
             self.handle_approach(front_distance, side_distance)
-        elif self.state == 'FOLLOW':
+        elif self.state == RobotState.FOLLOW:
             self.handle_wall(front_distance, side_distance)
+        elif self.state == RobotState.TURNING:
+            self.handle_turning(front_distance, side_distance)
+        elif self.state == RobotState.COMPLETE:
+            self.handle_complete()
 
     def handle_approach(self, front_distance, side_distance):
         self.get_logger().info(f"Front obstacle at {front_distance:.2f} m")
@@ -55,27 +74,41 @@ class ApproachNode(Node):
         cmd = Twist()
         if front_distance > self.target_distance:
             cmd.linear.x = self.approach_speed
-            cmd.angular.z = 0.0
+            cmd.angular.z = ZERO
 
             distance_to_target = front_distance - self.target_distance
             self.get_logger().info(f"Moving forward, distance to goal: {distance_to_target:.2f} m")
         else:
-            cmd.linear.x = 0.0
-            cmd.angular.z = 0.0
+            cmd.linear.x = ZERO
+            cmd.angular.z = ZERO
             self.get_logger().info(f"Target reached")
-            self.state = 'FOLLOW'
+            self.state = RobotState.FOLLOW
 
         self.cmd_vel_publisher.publish(cmd)
 
     def handle_wall(self, front_distance, side_distance):
         self.get_logger().info(f"FOLLOW - FRONT: {front_distance:.2f} m, SIDE: {side_distance:.2f} m")
+
+        # detect corners
+        if side_distance > self.corner_threshold:
+            self.state = RobotState.TURNING
+            self.turn_start_time = time.time()
+
+            self.get_logger().info(f'CORNER DETECTED! (side={side_distance:.2f}m) → TURNING')
+
+            cmd = Twist()
+            cmd.linear.x = ZERO
+            cmd.angular.z = self.turning_speed  # Start rotation
+            self.cmd_vel_publisher.publish(cmd)
+            return  # Exit early
+
         cmd = Twist()
 
         error = side_distance - self.wall_target_distance
 
         if abs(error) < self.wall_distance_tolerance:
             cmd.linear.x = self.wall_follow_speed
-            cmd.angular.z = 0.0
+            cmd.angular.z = ZERO
             self.get_logger().info(f"Side distance {side_distance:.2f} okay, moving straight")
         elif error < 0:
             cmd.linear.x = self.wall_follow_speed
@@ -87,16 +120,60 @@ class ApproachNode(Node):
             self.get_logger().info(f"Error {error:.2f}, steering towards goal")
 
         if front_distance < 0.3:
-            cmd.linear.x = 0.0
+            cmd.linear.x = ZERO
             self.get_logger().warn("Obstacle ahead, stopping")
 
         self.cmd_vel_publisher.publish(cmd)
 
+    def handle_turning(self, front_distance, side_distance):
+        elapsed_time = time.time() - self.turn_start_time
+
+        self.get_logger().info(f'[TURNING] Elapsed: {elapsed_time:.1f}s / {self.turn_duration:.1f}s')
+
+        if elapsed_time >= self.turn_duration:
+            self.turn_count += 1
+
+            self.get_logger().info(f'Turn complete! ({self.turn_count}/{self.total_turns} turns done)')
+
+            # Check if we've completed all turns
+            if self.turn_count >= self.total_turns:
+                # ====== ALL TURNS DONE - MISSION COMPLETE ======
+                self.state = RobotState.COMPLETE
+                self.get_logger().info('MISSION COMPLETE!')
+            else:
+                # ====== MORE TURNS TO GO - RESUME FOLLOWING ======
+                self.state = RobotState.FOLLOW
+                self.get_logger().info('TRANSITION: TURNING -> FOLLOW')
+
+            # Stop rotating
+            cmd = Twist()
+            cmd.linear.x = ZERO
+            cmd.angular.z = ZERO
+            self.cmd_vel_publisher.publish(cmd)
+
+        else:
+            # ====== STILL TURNING ======
+            # Continue rotating
+
+            cmd = Twist()
+            cmd.linear.x = ZERO  # Don't move forward
+            cmd.angular.z = self.turning_speed  # Keep rotating
+
+            self.get_logger().info(f'Rotating... ({elapsed_time:.1f}s / {self.turn_duration:.1f}s)')
+
+            self.cmd_vel_publisher.publish(cmd)
+
+    def handle_complete(self):
+        cmd = Twist()
+        cmd.linear.x = ZERO
+        cmd.angular.z = ZERO
+        self.cmd_vel_publisher.publish(cmd)
+        self.get_logger().info(f'[COMPLETE] Mission finished!')
 
     def stop_robot(self):
         cmd = Twist()
-        cmd.linear.x = 0.0
-        cmd.angular.z = 0.0
+        cmd.linear.x = ZERO
+        cmd.angular.z = ZERO
         self.cmd_vel_publisher.publish(cmd)
         self.get_logger().info(f"Emergency stop")
 
