@@ -21,4 +21,9 @@ __pycache__/
 
 # Gazebo / cache
 *.db
+
+# Ignore SDF everywhere
 *.sdf
+
+# But track Gazebo world files
+!src/car_washing_robot_bringup/worlds/*.sdf
