@@ -9,6 +9,7 @@
     <xacro:include filename="camera.xacro" />
     <xacro:include filename="six_dof_arm.xacro"/>
     <xacro:include filename="six_dof_arm_gazebo.xacro"/>
+    <xacro:include filename="lidar.xacro"/>
     
    
     
@@ -20,6 +21,7 @@
         <child link="arm_base_link" />
         <origin xyz="${base_length / 5.0} 0 ${base_height + arm_base_height/2.0}" rpy="0 0 0" />
     </joint>
+
 
 
 </robot>

@@ -36,4 +36,9 @@
     <node pkg="rviz2" exec="rviz2" output="screen" 
           args="-d $(var rviz_config_path) "/>
 
+
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="lidar_tf_pub"
+      args="0 0 0.2 0 0 0 base_link car_washing_robot/base_footprint/lidar"/>
+ -->
+
 </launch>
