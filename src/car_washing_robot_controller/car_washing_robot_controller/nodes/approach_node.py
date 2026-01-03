@@ -48,14 +48,15 @@ class ApproachNode(Node):
         if side_distance == float('inf') or side_distance != side_distance:
             side_distance = MAX_DISTANCE
 
-        if self.state == RobotState.APPROACH:
-            self.handle_approach(front_distance, side_distance)
-        elif self.state == RobotState.FOLLOW:
-            self.handle_wall(front_distance, side_distance)
-        elif self.state == RobotState.TURNING:
-            self.handle_turning(front_distance, side_distance)
-        elif self.state == RobotState.COMPLETE:
-            self.handle_complete()
+        match self.state:
+            case RobotState.APPROACH:
+                self.handle_approach(front_distance, side_distance)
+            case RobotState.FOLLOW:
+                self.handle_wall(front_distance, side_distance)
+            case RobotState.TURNING:
+                self.handle_turning(front_distance, side_distance)
+            case RobotState.COMPLETE:
+                self.handle_complete()
 
     def handle_approach(self, front_distance, side_distance):
         self.get_logger().info(f"Front obstacle at {front_distance:.2f} m")
