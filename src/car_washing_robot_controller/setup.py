@@ -29,6 +29,7 @@ setup(
     entry_points={
         'console_scripts': [
             'approach_node = car_washing_robot_controller.nodes.approach_node:main',
+            'arm_controller_node = car_washing_robot_controller.nodes.arm_controller_node:main',
         ],
     },
 )
