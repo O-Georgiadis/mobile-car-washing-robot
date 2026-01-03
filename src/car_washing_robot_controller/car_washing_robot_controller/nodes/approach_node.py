@@ -16,17 +16,6 @@ from ..utils.robot_state import RobotState
 class ApproachNode(Node):
     def __init__(self):
         Node.__init__(self, 'approach_node')
-        self.target_distance = TARGET_DISTANCE
-        self.approach_speed = APPROACH_SPEED
-        self.wall_target_distance = WALL_TARGET_DISTANCE
-        self.wall_follow_speed = WALL_FOLLOW_SPEED
-        self.wall_distance_tolerance = WALL_DISTANCE_TOLERANCE
-        self.steering_gain = STEERING_GAIN
-
-        self.corner_threshold = CORNER_DETECTION_THRESHOLD
-        self.turning_speed = TURNING_SPEED
-        self.turn_duration = TURN_DURATION
-
         self.state = RobotState.APPROACH
 
         self.turn_count = 0
@@ -72,11 +61,11 @@ class ApproachNode(Node):
         self.get_logger().info(f"Front obstacle at {front_distance:.2f} m")
 
         cmd = Twist()
-        if front_distance > self.target_distance:
-            cmd.linear.x = self.approach_speed
+        if front_distance > TARGET_DISTANCE:
+            cmd.linear.x = APPROACH_SPEED
             cmd.angular.z = ZERO
 
-            distance_to_target = front_distance - self.target_distance
+            distance_to_target = front_distance - TARGET_DISTANCE
             self.get_logger().info(f"Moving forward, distance to goal: {distance_to_target:.2f} m")
         else:
             cmd.linear.x = ZERO
@@ -90,7 +79,7 @@ class ApproachNode(Node):
         self.get_logger().info(f"FOLLOW - FRONT: {front_distance:.2f} m, SIDE: {side_distance:.2f} m")
 
         # detect corners
-        if side_distance > self.corner_threshold:
+        if side_distance > CORNER_DETECTION_THRESHOLD:
             self.state = RobotState.TURNING
             self.turn_start_time = time.time()
 
@@ -98,25 +87,25 @@ class ApproachNode(Node):
 
             cmd = Twist()
             cmd.linear.x = ZERO
-            cmd.angular.z = self.turning_speed  # Start rotation
+            cmd.angular.z = TURNING_SPEED  # Start rotation
             self.cmd_vel_publisher.publish(cmd)
             return  # Exit early
 
         cmd = Twist()
 
-        error = side_distance - self.wall_target_distance
+        error = side_distance - WALL_TARGET_DISTANCE
 
-        if abs(error) < self.wall_distance_tolerance:
-            cmd.linear.x = self.wall_follow_speed
+        if abs(error) < WALL_DISTANCE_TOLERANCE:
+            cmd.linear.x = WALL_FOLLOW_SPEED
             cmd.angular.z = ZERO
             self.get_logger().info(f"Side distance {side_distance:.2f} okay, moving straight")
         elif error < 0:
-            cmd.linear.x = self.wall_follow_speed
-            cmd.angular.z = self.steering_gain * abs(error)
+            cmd.linear.x = WALL_FOLLOW_SPEED
+            cmd.angular.z = STEERING_GAIN * abs(error)
             self.get_logger().info(f"Error {error:.2f}, steering away")
         else:
-            cmd.linear.x = self.wall_follow_speed
-            cmd.angular.z = -self.steering_gain * error
+            cmd.linear.x = WALL_FOLLOW_SPEED
+            cmd.angular.z = -STEERING_GAIN * error
             self.get_logger().info(f"Error {error:.2f}, steering towards goal")
 
         if front_distance < 0.3:
@@ -128,9 +117,9 @@ class ApproachNode(Node):
     def handle_turning(self, front_distance, side_distance):
         elapsed_time = time.time() - self.turn_start_time
 
-        self.get_logger().info(f'[TURNING] Elapsed: {elapsed_time:.1f}s / {self.turn_duration:.1f}s')
+        self.get_logger().info(f'[TURNING] Elapsed: {elapsed_time:.1f}s / {TURN_DURATION:.1f}s')
 
-        if elapsed_time >= self.turn_duration:
+        if elapsed_time >= TURN_DURATION:
             self.turn_count += 1
 
             self.get_logger().info(f'Turn complete! ({self.turn_count}/{self.total_turns} turns done)')
@@ -157,9 +146,9 @@ class ApproachNode(Node):
 
             cmd = Twist()
             cmd.linear.x = ZERO  # Don't move forward
-            cmd.angular.z = self.turning_speed  # Keep rotating
+            cmd.angular.z = TURNING_SPEED  # Keep rotating
 
-            self.get_logger().info(f'Rotating... ({elapsed_time:.1f}s / {self.turn_duration:.1f}s)')
+            self.get_logger().info(f'Rotating... ({elapsed_time:.1f}s / {TURN_DURATION:.1f}s)')
 
             self.cmd_vel_publisher.publish(cmd)
 
