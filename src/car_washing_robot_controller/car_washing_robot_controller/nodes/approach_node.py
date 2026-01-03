@@ -85,11 +85,7 @@ class ApproachNode(Node):
             self.turn_start_time = time.time()
 
             self.get_logger().info(f'CORNER DETECTED! (side={side_distance:.2f}m) → TURNING')
-
-            cmd = Twist()
-            cmd.linear.x = ZERO
-            cmd.angular.z = TURNING_SPEED  # Start rotation
-            self.cmd_vel_publisher.publish(cmd)
+            self.publish_velocity(ZERO, TURNING_SPEED) # start rotation
             return  # Exit early
 
         cmd = Twist()
@@ -136,35 +132,27 @@ class ApproachNode(Node):
                 self.get_logger().info('TRANSITION: TURNING -> FOLLOW')
 
             # Stop rotating
-            cmd = Twist()
-            cmd.linear.x = ZERO
-            cmd.angular.z = ZERO
-            self.cmd_vel_publisher.publish(cmd)
+            self.publish_velocity(ZERO, ZERO)
 
         else:
             # ====== STILL TURNING ======
             # Continue rotating
-
-            cmd = Twist()
-            cmd.linear.x = ZERO  # Don't move forward
-            cmd.angular.z = TURNING_SPEED  # Keep rotating
-
+            self.publish_velocity(ZERO, TURNING_SPEED) # don't move forward, keep rotating
             self.get_logger().info(f'Rotating... ({elapsed_time:.1f}s / {TURN_DURATION:.1f}s)')
 
-            self.cmd_vel_publisher.publish(cmd)
 
     def handle_complete(self):
-        cmd = Twist()
-        cmd.linear.x = ZERO
-        cmd.angular.z = ZERO
-        self.cmd_vel_publisher.publish(cmd)
+        self.publish_velocity(ZERO, ZERO)
         self.get_logger().info(f'[COMPLETE] Mission finished!')
 
-    def stop_robot(self):
+    def publish_velocity(self, linear, angular):
         cmd = Twist()
-        cmd.linear.x = ZERO
-        cmd.angular.z = ZERO
+        cmd.linear.x = linear
+        cmd.angular.z = angular
         self.cmd_vel_publisher.publish(cmd)
+
+    def stop_robot(self):
+        self.publish_velocity(ZERO, ZERO)
         self.get_logger().info(f"Emergency stop")
 
 
