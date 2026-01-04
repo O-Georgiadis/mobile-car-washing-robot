@@ -32,7 +32,7 @@ class ApproachNode(Node):
         self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
         self.get_logger().info('ApproachNode Node created')
 
-    def callback_scan(self, msg: LaserScan):
+    def callback_scan(self, msg: LaserScan) -> None:
         # extract front distance
         num_readings = len(msg.ranges)
 
@@ -59,7 +59,7 @@ class ApproachNode(Node):
             case RobotState.COMPLETE:
                 self.handle_complete()
 
-    def handle_approach(self, front_distance, side_distance):
+    def handle_approach(self, front_distance: float) -> None:
         self.get_logger().info(f"Front obstacle at {front_distance:.2f} m")
 
         if front_distance > TARGET_DISTANCE:
@@ -71,7 +71,7 @@ class ApproachNode(Node):
             self.get_logger().info(f"Target reached")
             self.state = RobotState.FOLLOW
 
-    def handle_wall(self, front_distance, side_distance):
+    def handle_wall(self, front_distance: float, side_distance: float) -> None:
         self.get_logger().info(f"FOLLOW - FRONT: {front_distance:.2f} m, SIDE: {side_distance:.2f} m")
 
         # detect corners
@@ -100,7 +100,7 @@ class ApproachNode(Node):
             self.get_logger().warn("Obstacle ahead, stopping")
 
 
-    def handle_turning(self, front_distance, side_distance):
+    def handle_turning(self) -> None:
         elapsed_time = time.time() - self.turn_start_time
 
         self.get_logger().info(f'[TURNING] Elapsed: {elapsed_time:.1f}s / {TURN_DURATION:.1f}s')
@@ -130,10 +130,10 @@ class ApproachNode(Node):
             self.get_logger().info(f'Rotating... ({elapsed_time:.1f}s / {TURN_DURATION:.1f}s)')
 
 
-    def handle_complete(self):
+    def handle_complete(self) -> None:
         self.publish_velocity(ZERO, ZERO)
 
-    def publish_velocity(self, linear, angular):
+    def publish_velocity(self, linear: float, angular: float) -> None:
         cmd = Twist()
         cmd.linear.x = linear
         cmd.angular.z = angular
