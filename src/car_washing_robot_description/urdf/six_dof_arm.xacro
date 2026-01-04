@@ -95,7 +95,7 @@
   </xacro:macro>
 
   <!-- Instantiate 6 links -->
-  <xacro:z_axis_arm_link link_name="link_1" parent_name="arm_base_link" xyz="${arm_base_width/4.0} 0 0.13" rpy="0 0 0" length="0.2" radius="0.07" mass="1.0" ixx="0.005" iyy="0.005" izz="0.005"/>
+  <xacro:z_axis_arm_link link_name="link_1" parent_name="arm_base_link" xyz="${-arm_base_width/4.0} 0 0.13" rpy="0 0 0" length="0.2" radius="0.07" mass="1.0" ixx="0.005" iyy="0.005" izz="0.005"/>
   <xacro:arm_link link_name="link_2" parent_name="link_1" xyz="0 0 0.2" rpy="0 0 0" length="0.2" radius="0.06" mass="0.8" ixx="0.003" iyy="0.003" izz="0.003"/>
   <xacro:arm_link link_name="link_3" parent_name="link_2" xyz="0 0 0.2" rpy="0 0 0" length="0.15" radius="0.05" mass="0.6" ixx="0.002" iyy="0.002" izz="0.002"/>
   <xacro:z_axis_arm_link link_name="link_4" parent_name="link_3" xyz="0 0 0.15" rpy="0 0 0" length="0.15" radius="0.05" mass="0.5" ixx="0.0015" iyy="0.0015" izz="0.0015"/>

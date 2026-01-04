@@ -19,8 +19,8 @@
     <!-- Start Gazebo with a world-->
     <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
         <arg name="gz_args" value="$(find-pkg-share car_washing_robot_bringup)/worlds/garage_world.sdf -r"/>
-        <!-- If We want to run Gazebo with empty world
-        <arg name="gz_args" value="empty.sdf -r"/> -->
+        <!-- If We want to run Gazebo with empty world -->
+        <!-- <arg name="gz_args" value="empty.sdf -r"/> -->
     </include>
 
     <!-- Spawn Robot in Gazebo -->
@@ -35,5 +35,6 @@
     <!-- Start RViz2 Node -->
     <node pkg="rviz2" exec="rviz2" output="screen" 
           args="-d $(var rviz_config_path) "/>
+
 
 </launch>
