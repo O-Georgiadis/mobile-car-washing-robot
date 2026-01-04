@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="car_washing_robot_controller" exec="approach_node" name="approach_node" output="screen" />
+    <node pkg="car_washing_robot_controller" exec="arm_controller_node" name="arm_controller_node" output="screen" />
+</launch>

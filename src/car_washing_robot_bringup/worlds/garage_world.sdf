@@ -70,47 +70,47 @@
       <self_collide>false</self_collide>
     </model>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/hatchback copy/3</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Hatchback</uri>
       <name>hatchback</name>
       <pose>-1.2851693630218506 -0.30617800354957581 0 0 0 0</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall</name>
       <pose>-4.7120742797851562 9.8301296234130859 0 0 0 0</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_2</name>
       <pose>9.8084468841552734 4.8162441253662109 0 0 0 -1.571249995472251</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_3</name>
       <pose>9.8232173919677734 -4.9666132926940918 0 0 0 1.5678999944106633</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_1</name>
       <pose>4.7833900451660156 -9.9151687622070312 0 0 0 0</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_4</name>
       <pose>-5.1546640396118164 -9.9462900161743164 0 0 0 0</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_5</name>
       <pose>-9.8735618591308594 -4.9143643379211426 0 0 0 1.5684000250656882</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_6</name>
       <pose>4.8710117340087891 9.8264999389648438 0 0 0 0</pose>
     </include>
     <include>
-      <uri>file:///home/odysseas/.gz/fuel/fuel.gazebosim.org/openrobotics/models/cutout wall/2</uri>
+      <uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Cutout wall</uri>
       <name>cutout_wall_0</name>
       <pose>-9.8435745239257812 5.0298805236816406 0 0 0 1.5652399320578714</pose>
     </include>
