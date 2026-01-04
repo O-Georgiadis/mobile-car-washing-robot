@@ -20,7 +20,7 @@ class ArmControllerNode(Node):
         self.scrub_position_up = True
         self.initializing_done = False
 
-        self.timer = self.create_timer(2.0, self.move_to_home)
+        self.timer = self.create_timer(2.0, self.callback_timer)
         self.get_logger().info('Arm controller node started')
 
     def callback_timer(self) -> None:
