@@ -4,11 +4,12 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Twist
 import time
+import math
 from ..utils.constants import (
     APPROACH_SPEED, TARGET_DISTANCE,
     WALL_TARGET_DISTANCE, WALL_FOLLOW_SPEED, WALL_DISTANCE_TOLERANCE, STEERING_GAIN,
     CORNER_DETECTION_THRESHOLD, TURNING_SPEED, TURN_DURATION,
-    ZERO, MAX_DISTANCE
+    ZERO, MAX_DISTANCE, OBSTACLE_STOP_DISTANCE
 )
 from ..utils.robot_state import RobotState
 
@@ -42,10 +43,10 @@ class ApproachNode(Node):
         side_distance = msg.ranges[side_idx]
 
         # validate
-        if front_distance == float('inf') or front_distance != front_distance:
+        if not math.isfinite(front_distance):
             front_distance = MAX_DISTANCE
 
-        if side_distance == float('inf') or side_distance != side_distance:
+        if not math.isfinite(side_distance):
             side_distance = MAX_DISTANCE
 
         match self.state:
@@ -61,20 +62,14 @@ class ApproachNode(Node):
     def handle_approach(self, front_distance, side_distance):
         self.get_logger().info(f"Front obstacle at {front_distance:.2f} m")
 
-        cmd = Twist()
         if front_distance > TARGET_DISTANCE:
-            cmd.linear.x = APPROACH_SPEED
-            cmd.angular.z = ZERO
-
+            self.publish_velocity(APPROACH_SPEED, ZERO)
             distance_to_target = front_distance - TARGET_DISTANCE
             self.get_logger().info(f"Moving forward, distance to goal: {distance_to_target:.2f} m")
         else:
-            cmd.linear.x = ZERO
-            cmd.angular.z = ZERO
+            self.publish_velocity(ZERO, ZERO)
             self.get_logger().info(f"Target reached")
             self.state = RobotState.FOLLOW
-
-        self.cmd_vel_publisher.publish(cmd)
 
     def handle_wall(self, front_distance, side_distance):
         self.get_logger().info(f"FOLLOW - FRONT: {front_distance:.2f} m, SIDE: {side_distance:.2f} m")
@@ -88,28 +83,22 @@ class ApproachNode(Node):
             self.publish_velocity(ZERO, TURNING_SPEED) # start rotation
             return  # Exit early
 
-        cmd = Twist()
-
         error = side_distance - WALL_TARGET_DISTANCE
 
         if abs(error) < WALL_DISTANCE_TOLERANCE:
-            cmd.linear.x = WALL_FOLLOW_SPEED
-            cmd.angular.z = ZERO
+            self.publish_velocity(WALL_FOLLOW_SPEED, ZERO)
             self.get_logger().info(f"Side distance {side_distance:.2f} okay, moving straight")
         elif error < 0:
-            cmd.linear.x = WALL_FOLLOW_SPEED
-            cmd.angular.z = STEERING_GAIN * abs(error)
+            self.publish_velocity(WALL_FOLLOW_SPEED, STEERING_GAIN * abs(error))
             self.get_logger().info(f"Error {error:.2f}, steering away")
         else:
-            cmd.linear.x = WALL_FOLLOW_SPEED
-            cmd.angular.z = -STEERING_GAIN * error
+            self.publish_velocity(WALL_FOLLOW_SPEED, -STEERING_GAIN * error)
             self.get_logger().info(f"Error {error:.2f}, steering towards goal")
 
-        if front_distance < 0.3:
-            cmd.linear.x = ZERO
+        if front_distance < OBSTACLE_STOP_DISTANCE:
+            self.publish_velocity(ZERO, ZERO)
             self.get_logger().warn("Obstacle ahead, stopping")
 
-        self.cmd_vel_publisher.publish(cmd)
 
     def handle_turning(self, front_distance, side_distance):
         elapsed_time = time.time() - self.turn_start_time
@@ -143,17 +132,12 @@ class ApproachNode(Node):
 
     def handle_complete(self):
         self.publish_velocity(ZERO, ZERO)
-        self.get_logger().info(f'[COMPLETE] Mission finished!')
 
     def publish_velocity(self, linear, angular):
         cmd = Twist()
         cmd.linear.x = linear
         cmd.angular.z = angular
         self.cmd_vel_publisher.publish(cmd)
-
-    def stop_robot(self):
-        self.publish_velocity(ZERO, ZERO)
-        self.get_logger().info(f"Emergency stop")
 
 
 def main(args=None):
