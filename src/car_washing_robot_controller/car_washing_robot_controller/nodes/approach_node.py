@@ -59,7 +59,7 @@ class ApproachNode(Node):
             case RobotState.COMPLETE:
                 self.handle_complete()
 
-    def handle_approach(self, front_distance: float) -> None:
+    def handle_approach(self, front_distance: float, side_distance: float) -> None:
         self.get_logger().info(f"Front obstacle at {front_distance:.2f} m")
 
         if front_distance > TARGET_DISTANCE:
@@ -100,7 +100,7 @@ class ApproachNode(Node):
             self.get_logger().warn("Obstacle ahead, stopping")
 
 
-    def handle_turning(self) -> None:
+    def handle_turning(self, front_distance: float, side_distance: float) -> None:
         elapsed_time = time.time() - self.turn_start_time
 
         self.get_logger().info(f'[TURNING] Elapsed: {elapsed_time:.1f}s / {TURN_DURATION:.1f}s')
