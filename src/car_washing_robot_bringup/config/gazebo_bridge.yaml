@@ -75,9 +75,8 @@
 
 
 - ros_topic_name: "/scan"
-  # gz_topic_name: "/scan"
-    # gz_topic_name: "/world/empty/model/car_washing_robot/link/base_footprint/sensor/laser/scan"
-  gz_topic_name: "/world/empty/model/car_washing_robot/link/base_scan/sensor/laser/scan"
+  gz_topic_name: "/model/car_washing_robot/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"
   gz_type_name: "gz.msgs.LaserScan"
   direction: GZ_TO_ROS
+

@@ -15,7 +15,7 @@
             <left_joint>base_left_wheel_joint</left_joint>
             <right_joint>base_right_wheel_joint</right_joint>
             <wheel_separation>0.45</wheel_separation>
-            <wheel_radius>0.1</wheel_radius>
+            <wheel_radius>0.3</wheel_radius>
             <frame_id>odom</frame_id>
             <child_frame_id>base_footprint</child_frame_id>
         </plugin>
@@ -31,4 +31,19 @@
         </plugin>
     </gazebo>
 
+    <!-- <gazebo>
+        <plugin 
+            filename="gz-sim-pose-publisher-system"
+            name="gz::sim::systems::PosePublisher">
+            <publish_link_pose>true</publish_link_pose>
+            <publish_sensor_pose>true</publish_sensor_pose>
+            <publish_collision_pose>false</publish_collision_pose>
+            <publish_visual_pose>false</publish_visual_pose>
+            <publish_nested_model_pose>false</publish_nested_model_pose>
+            <use_pose_vector_msg>true</use_pose_vector_msg>
+            <static_publisher>false</static_publisher>
+            <static_update_frequency>100</static_update_frequency>
+            <update_frequency>100</update_frequency>
+        </plugin>
+    </gazebo> -->
 </robot>

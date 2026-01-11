@@ -5,7 +5,7 @@
     <xacro:property name="base_scan_length" value="0.05"/>
 
 
-    <link name="base_scan">
+    <link name="base_scan_link">
         <visual>
             <geometry>
                 <cylinder radius="${base_scan_radius}" length="${base_scan_length}"/>
@@ -23,28 +23,31 @@
     </link>
 
     <joint name="base_scan_joint" type="fixed"> 
-        <parent link="base_link"/>
-        <child link="base_scan"/>
-        <origin xyz="${arm_base_width/2.0} 0 ${arm_base_height + base_height}" rpy="0 0 0"/>
+        <parent link="arm_base_link"/>
+        <!-- <parent link="base_link"/> -->
+
+        <child link="base_scan_link"/>
+        <origin xyz="${arm_base_width/4.0} 0 ${arm_base_height/2.0}" rpy="0 0 0"/>
     </joint>
 
 
-    <gazebo reference="base_scan">
-        <sensor name="laser" type="gpu_lidar">
+    <gazebo reference="base_scan_link">
+        <sensor name="base_scan_sensor" type="gpu_lidar">
             <pose> 0 0 0 0 0 0 </pose>
             <always_on>true</always_on>
             <visualize>true</visualize>
             <update_rate>10</update_rate>
-            <!-- <topic>model/car_washing_robot/scan</topic> -->
-            <!-- <topic>scan</topic> -->
-            <gz_frame_id>base_scan</gz_frame_id>
+            <topic>model/car_washing_robot/scan</topic>
+            <!-- <topic>/scan</topic> -->
+            <!-- <frame_id>base_scan_link</frame_id> -->
+            <frame>base_scan_link</frame>
             <lidar>
                 <scan>
                     <horizontal>
                     <samples>720</samples>
                     <resolution>1</resolution>
-                    <min_angle>-3.14</min_angle>
-                    <max_angle>3.14</max_angle>
+                    <min_angle>-2.30</min_angle> <!-- -131.78 degrees-->
+                    <max_angle>2.30</max_angle>  <!--  131.78 degrees-->
                     </horizontal>
                 </scan>
                 <range>
@@ -57,18 +60,9 @@
                     <mean>0.0</mean>
                     <stddev>0.01</stddev>
                 </noise>
-                <!-- <ignore>
-                    <link>arm_base_link</link>
-                    <link>robot_arm_link_1</link>
-                    <link>robot_arm_link_2</link>
-                    <link>robot_arm_link_3</link>
-                    <link>robot_arm_link_4</link>
-                    <link>robot_arm_link_5</link>
-                    <link>robot_arm_link_6</link>
-                    <link>soap_tank</link>
-                </ignore> -->
             </lidar>
         </sensor>
     </gazebo>
 
 </robot>
+
