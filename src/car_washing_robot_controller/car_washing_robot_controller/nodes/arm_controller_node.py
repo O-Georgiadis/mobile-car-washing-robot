@@ -40,17 +40,17 @@ class ArmControllerNode(Node):
         msg = Float64()
 
         if self.scrub_position_up:
-            msg.data = 0.3
+            msg.data = 7.0
             self.joint2_pub.publish(msg)
-            self.get_logger().info("Scrubbing UP (joint2 = 0.3)")
+            self.get_logger().info("Scrubbing UP (joint2 = 7.0)")
             self.scrub_position_up = False
         else:
-            msg.data = 0.5
+            msg.data = 7.0
             self.joint2_pub.publish(msg)
-            self.get_logger().info("Scrubbing DOWN (joint2 = 0.5)")
+            self.get_logger().info("Scrubbing DOWN (joint2 = 7.0)")
             self.scrub_position_up = True
 
-        msg.data = -0.3
+        msg.data = -7.0
         self.joint3_pub.publish(msg)
 
     def publish_joint_positions(
