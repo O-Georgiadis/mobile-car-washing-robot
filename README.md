@@ -56,7 +56,7 @@ Prerequisites
 - ROS2 Jazzy
 - Gazebo Harmonic
 
-```
+```bash
 mkdir -p ~/ws_robot/src
 cd ~/ws_robot/src
 git clone https://github.com/O-Georgiadis/mobile-car-washing-robot.git
