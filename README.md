@@ -19,7 +19,7 @@ Team: 4 members
 
 🎯 Key Features
 
-- Autonomous Navigation: LiDAR-based obstacle detection and reactive navigation
+- Autonomous Navigation: Scripted FSM-based navigation with obstacle detection capability
 - 6-DOF Robotic Arm: Programmable manipulation for surface cleaning
 - Touchless Cleaning: High-pressure water spray system (no brushes → no scratches)
 - Safety First: Emergency stop functionality, collision avoidance
